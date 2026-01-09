@@ -17,7 +17,46 @@ document.addEventListener('DOMContentLoaded', function() {
     initBackToTop();
     initContactForm();
     initScrollReveal();
+    initPublicationsModal();
 });
+
+/* ============================================
+   Publications Modal
+   ============================================ */
+function initPublicationsModal() {
+    // Close modal on clicking outside
+    const modal = document.getElementById('publicationsModal');
+    if (modal) {
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                closePublicationsModal();
+            }
+        });
+        
+        // Close modal on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && modal.classList.contains('active')) {
+                closePublicationsModal();
+            }
+        });
+    }
+}
+
+function openPublicationsModal() {
+    const modal = document.getElementById('publicationsModal');
+    if (modal) {
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function closePublicationsModal() {
+    const modal = document.getElementById('publicationsModal');
+    if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = 'auto';
+    }
+}
 
 /* ============================================
    Preloader
@@ -244,7 +283,57 @@ function initParticles() {
    Typing Effect
    ============================================ */
 function initTypingEffect() {
-    const typingText = document.querySelector('#typing-text');
+    // Image typing text (below image) - All designations and expertise
+    const imageTypingText = document.querySelector('#image-typing-text');
+    if (imageTypingText) {
+        const imageTexts = [
+            'IoT & Biomedical Signal Processing',
+            'Machine Learning Researcher',
+            'Metamaterial Expert',
+            'UGC-NET JRF Qualified',
+            'Visvesvaraya Ph.D. Fellow',
+            'Academic Editor - PLOS ONE',
+            'Academic Editor - Hindawi',
+            '100+ SCI/Scopus Publications'
+        ];
+        
+        let imgTextIndex = 0;
+        let imgCharIndex = 0;
+        let imgIsDeleting = false;
+        
+        function typeImage() {
+            const currentText = imageTexts[imgTextIndex];
+            
+            if (imgIsDeleting) {
+                imageTypingText.textContent = currentText.substring(0, imgCharIndex - 1);
+                imgCharIndex--;
+            } else {
+                imageTypingText.textContent = currentText.substring(0, imgCharIndex + 1);
+                imgCharIndex++;
+            }
+            
+            let speed = imgIsDeleting ? 40 : 80;
+            
+            if (!imgIsDeleting && imgCharIndex === currentText.length) {
+                speed = 2500;
+                imgIsDeleting = true;
+            } else if (imgIsDeleting && imgCharIndex === 0) {
+                imgIsDeleting = false;
+                imgTextIndex = (imgTextIndex + 1) % imageTexts.length;
+                speed = 400;
+            }
+            
+            setTimeout(typeImage, speed);
+        }
+        typeImage();
+    }
+}
+
+/* ============================================
+   Legacy Typing Support (keeping for compatibility)
+   ============================================ */
+function initTypingEffectLegacy() {
+    const typingText = document.querySelector('#typing-text-legacy');
     if (!typingText) return;
     
     const texts = [

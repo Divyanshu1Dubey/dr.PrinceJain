@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Dr. Prince Jain - Photo Gallery">
+    <title>Gallery | Dr. Prince Jain</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- AOS Animation Library -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <style>
+        /* Gallery Page Specific Styles */
+        .gallery-page {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            padding: 120px 0 80px;
+        }
+        
+        .gallery-page-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .gallery-page-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+        }
+        
+        .gallery-page-header p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.1rem;
+        }
+        
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 30px;
+            background: var(--gradient-1);
+            color: white;
+            border-radius: 50px;
+            font-weight: 600;
+            margin-bottom: 40px;
+            transition: all 0.3s ease;
+        }
+        
+        .back-btn:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+        
+        .gallery-page-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            padding: 0 20px;
+        }
+        
+        .gallery-page-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            transition: all 0.4s ease;
+            cursor: pointer;
+        }
+        
+        .gallery-page-item:hover {
+            transform: translateY(-10px);
+            border-color: rgba(240, 147, 251, 0.5);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
+        }
+        
+        .gallery-page-item img {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .gallery-page-item:hover img {
+            transform: scale(1.05);
+        }
+        
+        .gallery-page-item-info {
+            padding: 25px;
+        }
+        
+        .gallery-page-item-info h3 {
+            color: white;
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .gallery-page-item-info p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        
+        .gallery-page-item-info .gallery-category {
+            display: inline-block;
+            padding: 5px 15px;
+            background: var(--gradient-1);
+            border-radius: 20px;
+            color: white;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-top: 15px;
+        }
+        
+        /* Image Modal for Full View */
+        .image-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .image-modal.active {
+            display: flex;
+        }
+        
+        .image-modal-content {
+            max-width: 900px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            animation: modalZoomIn 0.4s ease;
+        }
+        
+        @keyframes modalZoomIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        .image-modal-content img {
+            width: 100%;
+            max-height: 500px;
+            object-fit: contain;
+            background: rgba(0, 0, 0, 0.5);
+        }
+        
+        .image-modal-details {
+            padding: 30px;
+        }
+        
+        .image-modal-details h2 {
+            color: white;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .image-modal-details p {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.8;
+            font-size: 1rem;
+        }
+        
+        .image-modal-details .modal-category {
+            display: inline-block;
+            padding: 8px 20px;
+            background: var(--gradient-2);
+            border-radius: 25px;
+            color: white;
+            font-weight: 600;
+            margin-top: 20px;
+        }
+        
+        .image-modal-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 2.5rem;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10001;
+        }
+        
+        .image-modal-close:hover {
+            color: #f093fb;
+            transform: rotate(90deg);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .gallery-page-header h1 {
+                font-size: 2.5rem;
+            }
+            
+            .gallery-page-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .image-modal-content img {
+                max-height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar" style="background: rgba(10, 10, 10, 0.95); backdrop-filter: blur(20px);">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <span class="logo-text">Dr. PJ</span>
+            </a>
+            
+            <ul class="nav-menu" id="nav-menu">
+                <li class="nav-item"><a href="index.html#home" class="nav-link">Home</a></li>
+                <li class="nav-item"><a href="index.html#about" class="nav-link">About</a></li>
+                <li class="nav-item"><a href="index.html#education" class="nav-link">Education</a></li>
+                <li class="nav-item"><a href="index.html#experience" class="nav-link">Experience</a></li>
+                <li class="nav-item"><a href="index.html#publications" class="nav-link">Publications</a></li>
+                <li class="nav-item"><a href="index.html#patents" class="nav-link">Patents</a></li>
+                <li class="nav-item"><a href="index.html#awards" class="nav-link">Awards</a></li>
+                <li class="nav-item"><a href="gallery.html" class="nav-link active">Gallery</a></li>
+                <li class="nav-item"><a href="index.html#contact" class="nav-link">Contact</a></li>
+            </ul>
+            
+            <div class="nav-toggle" id="nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Gallery Page Content -->
+    <section class="gallery-page">
+        <div class="container">
+            <a href="index.html" class="back-btn" data-aos="fade-right">
+                <i class="fas fa-arrow-left"></i>
+                Back to Portfolio
+            </a>
+            
+            <div class="gallery-page-header" data-aos="fade-up">
+                <h1>Photo Gallery</h1>
+                <p>Memorable moments from academic journey, conferences, and achievements</p>
+            </div>
+            
+            <div class="gallery-page-grid">
+                <!-- Gallery Item 1 -->
+                <div class="gallery-page-item" data-aos="fade-up" data-aos-delay="100" 
+                     onclick="openImageModal('dr.PrinceJain.jpg', 'Dr. Prince Jain - Profile', 'Official profile photograph of Dr. Prince Jain, Assistant Professor (Research Cadre) at Parul University. Recognized as Top 2% Scientists Worldwide in 2025 by Stanford University & Elsevier.', 'Profile')">
+                    <img src="dr.PrinceJain.jpg" alt="Dr. Prince Jain - Profile">
+                    <div class="gallery-page-item-info">
+                        <h3>Dr. Prince Jain</h3>
+                        <p>Official profile photograph - Assistant Professor (Research Cadre) at Parul University</p>
+                        <span class="gallery-category">Profile</span>
+                    </div>
+                </div>
+                
+                <!-- Gallery Item 2 -->
+                <div class="gallery-page-item" data-aos="fade-up" data-aos-delay="150"
+                     onclick="openImageModal('paruluniversity.jpg', 'Parul University, Gujarat', 'Parul University - Current workplace where Dr. Prince Jain serves as Assistant Professor (Research Cadre) in the Faculty of Engineering & Technology. One of the premier private universities in Gujarat, India.', 'Institution')">
+                    <img src="paruluniversity.jpg" alt="Parul University">
+                    <div class="gallery-page-item-info">
+                        <h3>Parul University, Gujarat</h3>
+                        <p>Current workplace - Faculty of Engineering & Technology</p>
+                        <span class="gallery-category">Institution</span>
+                    </div>
+                </div>
+                
+                <!-- Gallery Item 3 -->
+                <div class="gallery-page-item" data-aos="fade-up" data-aos-delay="200"
+                     onclick="openImageModal('chandigarh_unuiversity.png', 'Chandigarh University', 'Chandigarh University - Former workplace where Dr. Prince Jain served as Assistant Professor from July 2020 to July 2022 in the Department of Electronics & Communication Engineering.', 'Institution')">
+                    <img src="chandigarh_unuiversity.png" alt="Chandigarh University">
+                    <div class="gallery-page-item-info">
+                        <h3>Chandigarh University</h3>
+                        <p>Former workplace (2020-2022) - Department of ECE</p>
+                        <span class="gallery-category">Institution</span>
+                    </div>
+                </div>
+                
+                <!-- Gallery Item 4 -->
+                <div class="gallery-page-item" data-aos="fade-up" data-aos-delay="250"
+                     onclick="openImageModal('punjab_enginerring_college.png', 'Punjab Engineering College, Chandigarh', 'Punjab Engineering College (Deemed to be University) - Alma mater where Dr. Prince Jain completed his Ph.D. in Electronics and Communication Engineering from August 2016 to December 2022.', 'Education')">
+                    <img src="punjab_enginerring_college.png" alt="Punjab Engineering College">
+                    <div class="gallery-page-item-info">
+                        <h3>Punjab Engineering College</h3>
+                        <p>Alma Mater - Ph.D. in Electronics & Communication (2016-2022)</p>
+                        <span class="gallery-category">Education</span>
+                    </div>
+                </div>
+                
+                <!-- Placeholder for more images -->
+                <div class="gallery-page-item" data-aos="fade-up" data-aos-delay="300" style="background: rgba(102, 126, 234, 0.1); display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 400px;">
+                    <div style="text-align: center; padding: 40px;">
+                        <i class="fas fa-camera" style="font-size: 4rem; color: rgba(102, 126, 234, 0.5); margin-bottom: 20px;"></i>
+                        <h3 style="color: rgba(255,255,255,0.7); margin-bottom: 10px;">More Photos Coming Soon</h3>
+                        <p style="color: rgba(255,255,255,0.5); font-size: 0.9rem;">Conference presentations, awards ceremonies, and more memorable moments will be added</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Image Modal -->
+    <div class="image-modal" id="imageModal">
+        <span class="image-modal-close" onclick="closeImageModal()">&times;</span>
+        <div class="image-modal-content">
+            <img id="modalImage" src="" alt="">
+            <div class="image-modal-details">
+                <h2 id="modalTitle"></h2>
+                <p id="modalDescription"></p>
+                <span class="modal-category" id="modalCategory"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer style="background: #0a0a0a; padding: 30px 0; text-align: center; border-top: 1px solid rgba(102, 126, 234, 0.2);">
+        <p style="color: rgba(255,255,255,0.6);">© 2025 Dr. Prince Jain. All Rights Reserved.</p>
+    </footer>
+
+    <!-- AOS Animation Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            easing: 'ease-out',
+            once: true
+        });
+        
+        // Mobile Navigation Toggle
+        const navToggle = document.getElementById('nav-toggle');
+        const navMenu = document.getElementById('nav-menu');
+        
+        navToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            navToggle.classList.toggle('active');
+        });
+        
+        // Image Modal Functions
+        function openImageModal(imageSrc, title, description, category) {
+            const modal = document.getElementById('imageModal');
+            const modalImage = document.getElementById('modalImage');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalDescription = document.getElementById('modalDescription');
+            const modalCategory = document.getElementById('modalCategory');
+            
+            modalImage.src = imageSrc;
+            modalTitle.textContent = title;
+            modalDescription.textContent = description;
+            modalCategory.textContent = category;
+            
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeImageModal() {
+            const modal = document.getElementById('imageModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+        
+        // Close modal on outside click
+        document.getElementById('imageModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeImageModal();
+            }
+        });
+        
+        // Close modal on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeImageModal();
+            }
+        });
+    </script>
+</body>
+</html>
