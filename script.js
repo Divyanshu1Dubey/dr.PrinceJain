@@ -287,14 +287,16 @@ function initTypingEffect() {
     const imageTypingText = document.querySelector('#image-typing-text');
     if (imageTypingText) {
         const imageTexts = [
-            'IoT & Biomedical Signal Processing',
-            'Machine Learning Researcher',
-            'Metamaterial Expert',
-            'UGC-NET JRF Qualified',
-            'Visvesvaraya Ph.D. Fellow',
-            'Academic Editor - PLOS ONE',
-            'Academic Editor - Hindawi',
-            '100+ SCI/Scopus Publications'
+            'Top 2% Scientists Worldwide (Elsevier-Stanford)',
+        'Assistant Professor (Research Cadre)',
+        'Editor - PLOS ONE',
+        'Editor - Journal of Electrical and Computer Engineering',
+       'Editor - International Journal of Antennas and Propagation',
+       'Editor - Discover Applied Sciences',
+        'Editor - Scientific Reports',
+        'Visvesvaraya Ph.D. Fellow',
+        'UGC-NET JRF Qualified',
+        'GATE Qualified'
         ];
         
         let imgTextIndex = 0;
