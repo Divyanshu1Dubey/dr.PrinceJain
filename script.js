@@ -764,3 +764,95 @@ function activateEasterEgg() {
    ============================================ */
 console.log('%c Welcome to Dr. Prince Jain\'s Portfolio! ', 'background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; font-size: 20px; padding: 15px; border-radius: 10px;');
 console.log('%c Built with ❤️ ', 'font-size: 14px; padding: 5px;');
+
+    // Image Modal Slideshow State
+    let currentImages = [];
+    let currentIndex = 0;
+
+    // Image Modal Functions
+    function openImageModal(imageSrcOrArray, title, description, category) {
+        const modal = document.getElementById('imageModal');
+        const modalImage = document.getElementById('modalImage');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalDescription = document.getElementById('modalDescription');
+        const modalCategory = document.getElementById('modalCategory');
+        const modalCounter = document.getElementById('modalCounter');
+
+        // Support both single image (string) and multiple images (array)
+        if (Array.isArray(imageSrcOrArray)) {
+            currentImages = imageSrcOrArray;
+        } else {
+            currentImages = [imageSrcOrArray];
+        }
+        currentIndex = 0;
+
+        modalImage.src = currentImages[currentIndex];
+        modalTitle.textContent = title || '';
+        modalDescription.textContent = description || '';
+        modalCategory.textContent = category || '';
+
+        if (currentImages.length > 1) {
+            modalCounter.textContent = (currentIndex + 1) + ' / ' + currentImages.length;
+        } else {
+            modalCounter.textContent = '';
+        }
+
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeImageModal() {
+        const modal = document.getElementById('imageModal');
+        modal.classList.remove('active');
+        document.body.style.overflow = 'auto';
+    }
+
+    function showImageAt(index) {
+        if (!currentImages.length) return;
+
+        const modalImage = document.getElementById('modalImage');
+        const modalCounter = document.getElementById('modalCounter');
+
+        // wrap around (e.g., from last to first)
+        currentIndex = (index + currentImages.length) % currentImages.length;
+
+        modalImage.src = currentImages[currentIndex];
+
+        if (currentImages.length > 1) {
+            modalCounter.textContent = (currentIndex + 1) + ' / ' + currentImages.length;
+        } else {
+            modalCounter.textContent = '';
+        }
+    }
+
+    function nextImage(event) {
+        if (event) event.stopPropagation();
+        showImageAt(currentIndex + 1);
+    }
+
+    function prevImage(event) {
+        if (event) event.stopPropagation();
+        showImageAt(currentIndex - 1);
+    }
+
+    // Close modal on outside click
+    document.getElementById('imageModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeImageModal();
+        }
+    });
+
+    // Close modal / navigate with keyboard
+    document.addEventListener('keydown', function(e) {
+        const modal = document.getElementById('imageModal');
+        if (!modal.classList.contains('active')) return;
+
+        if (e.key === 'Escape') {
+            closeImageModal();
+        } else if (e.key === 'ArrowRight') {
+            nextImage();
+        } else if (e.key === 'ArrowLeft') {
+            prevImage();
+        }
+    });
+
