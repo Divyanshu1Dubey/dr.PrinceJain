@@ -345,7 +345,7 @@ function initTypingEffectLegacy() {
        'Editor - Discover Applied Sciences',
         'Editor - Scientific Reports',
         'Visvesvaraya Ph.D. Fellow',
-        'UGC-NET JRF Qualified'
+        'UGC-NET JRF Qualified',
         'GATE Qualified'
     ];
     
