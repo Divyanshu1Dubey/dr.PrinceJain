@@ -339,15 +339,14 @@ function initTypingEffectLegacy() {
     const texts = [
         'Top 2% Scientists Worldwide (Elsevier-Stanford)',
         'Assistant Professor (Research Cadre)',
-        'Academic Editor - PLOS ONE (IF: 3.752)',
-        'Academic Editor - Journal of ECE, Hindawi',
-        'Ph.D. from PEC Chandigarh',
-        'Machine Learning Researcher',
-        'Metamaterial Expert',
-        '100+ SCI/Scopus Publications',
-        'IoT & Biomedical Signal Processing',
+        'Editor - PLOS ONE',
+        'Editor - Journal of Electrical and Computer Engineering',
+       'Editor - International Journal of Antennas and Propagation',
+       'Editor - Discover Applied Sciences',
+        'Editor - Scientific Reports',
         'Visvesvaraya Ph.D. Fellow',
         'UGC-NET JRF Qualified'
+        'GATE Qualified'
     ];
     
     let textIndex = 0;
